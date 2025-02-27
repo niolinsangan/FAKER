@@ -5,61 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Insertion</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 </head>
 <body>
 <div class="container">
     <h1>Book Insertion</h1>
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'>
+    <table class='table table-bordered table-striped'>
+    <tr>
+        <th>Book Title</th>
+        <th>Author</th>
+        <th>Publication Year</th>
+        <th>Genre</th>
+    </tr>
+
     <?php
 
     require_once 'vendor/autoload.php';
     use Faker\Factory; // Add this line to import the Factory class
 
-    $host = 'localhost';
-    $dbname = 'your_database_name'; // Update with your actual database name
-    $username = 'your_username'; // Update with your actual username
-    $password = 'your_password'; // Update with your actual password
+    $faker = Factory::create();
+
+    $genres = ['Fiction', 'Non-Fiction', 'Biography', 'History', 'Science Fiction', 'Mystery', 'Fantasy', 'Horror', 'Romance', 'Thriller'];
+
+    $numBooks = 10;
+
+    for ($i = 0; $i < $numBooks; $i++) {
+        $title = $faker->sentence(3);
+        $author = $faker->name;
+        $genre = $faker->randomElement($genres);
+        $publicationYear = $faker->numberBetween(1900, 2024);
+        $isbn = $faker->isbn13;
+        $summary = $faker->paragraph;
+
+        echo "<tr>
+                <td>$title</td>
+                <td>$author</td>
+                <td>$publicationYear</td>
+                <td>$genre</td>
+              </tr>\n";
 
 
-    try {
-        $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        echo "<div class='alert alert-success'>Database connected successfully.</div>\n";
-
-        $faker = Factory::create();
-
-        $genres = ['Fiction', 'Non-Fiction', 'Biography', 'History', 'Science Fiction', 'Mystery', 'Fantasy', 'Horror', 'Romance', 'Thriller'];
-
-        $numBooks = 10;
-
-        for ($i = 0; $i < $numBooks; $i++) {
-            $title = $faker->sentence(3);
-            $author = $faker->name;
-            $genre = $faker->randomElement($genres);
-            $publicationYear = $faker->numberBetween(1900, 2024);
-            $isbn = $faker->isbn13;
-            $summary = $faker->paragraph;
-
-            $sql = "INSERT INTO Books (Title, Author, Genre, Publication_Year, ISBN, Summary)
-                    VALUES (:title, :author, :genre, :publicationYear, :isbn, :summary)";
-
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([
-                ':title' => $title,
-                ':author' => $author,
-                ':genre' => $genre,
-                ':publicationYear' => $publicationYear,
-                ':isbn' => $isbn,
-                ':summary' => $summary
-            ]);
-
-            echo "<div>Inserted Book: <strong>$title</strong> by <strong>$author</strong> ($publicationYear)</div>\n";
-        }
-
-        echo "<div class='alert alert-info'>Books table populated successfully!</div>\n";
-    } catch (PDOException $e) {
-        echo "<div class='alert alert-danger'>Database error: " . $e->getMessage() . "</div>";
     }
+
+    echo "</table>";
+    echo "<div class='alert alert-info'>Books data generated successfully!</div>\n";
+
+
     ?>
 </div>
 </body>
