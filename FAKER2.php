@@ -12,11 +12,13 @@
     <?php
 
     require_once 'vendor/autoload.php';
+    use Faker\Factory; // Add this line to import the Factory class
 
     $host = 'localhost';
-    $dbname = 'actual_database_name'; // Update with your actual database name
-    $username = 'actual_username'; // Update with your actual username
-    $password = 'actual_password'; // Update with your actual password
+    $dbname = 'your_database_name'; // Update with your actual database name
+    $username = 'your_username'; // Update with your actual username
+    $password = 'your_password'; // Update with your actual password
+
 
     try {
         $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
